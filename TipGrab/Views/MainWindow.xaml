@@ -1,0 +1,103 @@
+﻿<MahApps:MetroWindow x:Class="TipGrab.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TipGrab"
+        xmlns:MahApps="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        mc:Ignorable="d"
+        Title="TipGrab" 
+        Height="250" 
+        Width="500"
+        TitleCaps="False"
+        WindowStartupLocation="CenterScreen"
+        GlowBrush="{StaticResource AccentColorBrush}">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="0 2.5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Stream Tip Client ID: " VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding StreamTipClientID, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+        <Grid Grid.Row="1" Margin="0 2.5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Stream Tip Access Token: " VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding StreamTipAccessToken, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+        <Grid Grid.Row="2" Margin="0 2.5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Twitch Access Token: " VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding TwitchAuthToken, UpdateSourceTrigger=PropertyChanged}" Width="250" />
+            <Button Grid.Column="2" 
+                    HorizontalAlignment="Right" 
+                    Content="Get Token" 
+                    Command="{Binding AuthorizeTwitchCommand}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource MetroAccentButton}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Running}" Value="True">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+        </Grid>
+
+
+        <Grid Grid.Row="3" Margin="0 2.5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Channel: " VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding Channel, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        <Grid Grid.Row="4" Margin="0 2.5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Output: " VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding OutputPath, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+        <Button Grid.Row="5" 
+                Grid.Column="1" 
+                Margin="0 5"
+                HorizontalAlignment="Right" 
+                Content="{Binding ButtonText}"
+                Command="{Binding ButtonCommand}">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource MetroAccentButton}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding OAuthToken}" Value="">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Channel}" Value="">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </Grid>
+</MahApps:MetroWindow>

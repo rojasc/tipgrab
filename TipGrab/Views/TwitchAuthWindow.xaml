@@ -1,12 +1,13 @@
-﻿<Window x:Class="TipGrab.MainWindow"
+﻿<Window x:Class="TipGrab.Views.TwitchAuthWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TipGrab"
+        xmlns:local="clr-namespace:TipGrab.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        WindowStartupLocation="CenterOwner"
+        Title="TwitchAuthWindow" Height="500" Width="450">
     <Grid>
-        
+        <WebBrowser x:Name="webBrowser"/>
     </Grid>
 </Window>

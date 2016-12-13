@@ -13,16 +13,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TipGrab
+using MahApps.Metro.Controls;
+using TipGrab.ViewModels;
+using TipGrab.Properties;
+
+namespace TipGrab.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
+        private MainWindowViewModel _viewModel = new MainWindowViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = _viewModel;
         }
     }
 }
