@@ -89,7 +89,13 @@
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource MetroAccentButton}">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding OAuthToken}" Value="">
+                        <DataTrigger Binding="{Binding StreamTipClientID}" Value="">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding StreamTipAccessToken}" Value="">
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TwitchAuthToken}" Value="">
                             <Setter Property="IsEnabled" Value="False" />
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Channel}" Value="">

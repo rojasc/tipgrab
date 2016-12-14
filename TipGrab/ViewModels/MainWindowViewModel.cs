@@ -30,6 +30,7 @@ namespace TipGrab.ViewModels
         private bool _running;
         private ICommand _authorizeTwitchCommand;
         private ICommand _buttonCommand;
+        Regex _cheerPattern = new Regex("^cheer([0-9]+)\\s?(.*)?", RegexOptions.Compiled);
         private TwitchClient _client;
         private Thread _streamTipPollThread;
         private string _outputPath;
@@ -159,19 +160,20 @@ namespace TipGrab.ViewModels
         {
         }
 
-        private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
+        private async void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
 
             if (e.ChatMessage.Message.StartsWith("cheer"))
             {
-                Regex cheerPattern = new Regex("^cheer([0-9]+)");
-                Match cheerMatch = cheerPattern.Match(e.ChatMessage.Message);
+                Match cheerMatch = _cheerPattern.Match(e.ChatMessage.Message);
 
                 if (cheerMatch.Success)
                 {
                     string cheerValue = cheerMatch.Groups[1].Value;
+                    string message = cheerMatch.Groups[2].Value;
 
-                    WriteTip(cheerValue, true);
+                    WriteTip(e.ChatMessage.DisplayName, cheerValue, message, true);
+                    await Task.Delay(500);
                 }
             }
         }
@@ -179,12 +181,14 @@ namespace TipGrab.ViewModels
         private async void PollStreamTip()
         {
             string dateFrom = DateTime.Now.ToString("o");
-            string url = $"https://streamtip.com/api/tips?date_from={dateFrom}&direction=asc";
+            int offset = 0;
 
             using (HttpClient client = new HttpClient())
             {
                 while (Running)
                 {
+                    string url = $"https://streamtip.com/api/tips?date_from={dateFrom}&offset={offset}&direction=asc";
+
                     HttpRequestMessage request = new HttpRequestMessage()
                     {
                         RequestUri = new Uri(url),
@@ -205,7 +209,8 @@ namespace TipGrab.ViewModels
 
                         foreach (var tip in tips)
                         {
-                            WriteTip(tip["amount"].ToString());
+                            WriteTip(tip["username"].ToString(), tip["amount"].ToString(), tip["note"].ToString());
+                            offset++;
                         }
                     }
 
@@ -219,11 +224,15 @@ namespace TipGrab.ViewModels
 
                         await Task.Delay(epoch.Subtract(DateTime.UtcNow));
                     }
+                    else
+                    {
+                        await Task.Delay(1000);
+                    }
                 }
             }
         }
 
-        private void WriteTip(string tip, bool isCheer = false)
+        private void WriteTip(string user, string tip, string message, bool isCheer = false)
         {
             decimal cheerTip = Decimal.Parse(tip);
 
@@ -234,7 +243,7 @@ namespace TipGrab.ViewModels
 
             lock (_lock)
             {
-                File.WriteAllText(OutputPath, cheerTip.ToString("C"));
+                File.WriteAllText(OutputPath, $"{user}: {cheerTip.ToString("C")} - {message}");
             }
         }
     }
